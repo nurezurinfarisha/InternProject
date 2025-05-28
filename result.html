@@ -1,0 +1,426 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Scopus Miner</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="{{ url_for('static', filename='img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+    <!-- Icon Font Stylesheet -->
+     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Montserrat&family=Poppins&display=swap" rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom Stylesheet -->
+    <link href="{{ url_for('static', filename='css/result.css') }}" rel="stylesheet"> <!-- Link to your result.css -->
+ <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.15/dist/sweetalert2.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.15/dist/sweetalert2.all.min.js"></script>
+
+</head>
+
+<body class="bg-light">
+    <!-- Header Start -->
+<header class="header-navbar">
+    <div class="container">
+        <!-- Logo Section (Left aligned) -->
+        
+        <img src="{{ url_for('static', filename='img/uumlogo2.png') }}" alt="UUM Logo" class="logo">
+        <!-- Scopus Miner Title (Centered) -->
+        <div class="title-container">
+            <h3 class="mb-0 fw-bold text-white">Scopus Miner</h3>
+        </div>
+
+        <!-- Navigation Links (Right aligned) -->
+        <nav class="nav-links">
+            <ul>
+                <div class="logo-container">
+            <a href="{{ url_for('index') }}" class="home-link">
+                <i class="fas fa-home text-white" style="font-size: 1.8rem;"></i> <!-- Home Icon -->
+            </a>
+            
+        </div>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+    <!-- Header End -->
+
+    <main class="mt-5 pt-5">
+        <div class="container-fluid p-5">
+            <div class="row">
+                <!-- Sidebar Filters -->
+                <div class="col-md-3">
+                    <div class="bg-white shadow-sm rounded p-4">
+                        <h5 class="text-primary">Filter Results</h5>
+                        <hr>
+                                <!-- Search Bar for Filter -->
+        <div class="mb-3">
+            <label for="searchFilter" class="form-label">Search</label>
+            <input type="text" class="form-control" id="searchFilter" placeholder="Search results..." oninput="applyFilters()">
+        </div>
+                        <label for="docTypeFilter" class="form-label">Document Type</label>
+                        <select id="docTypeFilter" class="form-select mb-3" onchange="applyFilters()">
+                            <option value="all">All</option>
+                                <option value="article">Article</option>
+                                <option value="book chapter">Book Chapter</option>
+                                <option value="conference paper">Conference Paper</option>
+                                <option value="review">Review</option>
+                                <option value="editorial">Editorial</option>
+                                <option value="conference review">Conference Review</option>
+                                <option value="note">Note</option>
+                                <option value="book">Book</option>
+                                <option value="retracted">Retracted</option>
+                                <option value="letter">Letter</option>
+                                <option value="short survey">Short Survey</option>
+                                <option value="data paper">Data Paper</option>
+                                <option value="report">Report</option>
+                                <option value="erratum">Erratum</option>
+                                <option value="editorial">Editorial</option>
+                            </select>
+
+                        <label for="yearRangeStart" class="form-label">Year Range</label>
+                        <div class="d-flex justify-content-between">
+                            <span id="minYear">2000</span>
+                            <span id="maxYear">2025</span>
+                        </div>
+                        <input type="range" class="form-range" id="yearRangeStart" min="2000" max="2025" value="2000">
+                        <input type="range" class="form-range" id="yearRangeEnd" min="2000" max="2025" value="2025">
+
+                        <label for="authorTypeFilter" class="form-label">Filter by Author Type</label>
+                        <select class="form-select" id="authorTypeFilter">
+                            <option value="all">All Authors</option>
+                            <option value="staff">Staff (Lecturer)</option>
+                            <option value="student">Student</option>
+                        </select>
+
+
+                        <hr>
+                        <h6>Total Results: {{ total_results }}</h6>
+                        <h6><a href="{{ url_for('filter_by_author_type', author_type='staff') }}">Staff: {{ staff_count }}</a></h6>
+                        <h6><a href="{{ url_for('filter_by_author_type', author_type='student') }}">Students: {{ student_count }}</a></h6>
+                    </div>
+                </div>
+
+                <!-- Main Results Table -->
+                <div class="col-md-9">
+                    <div class="bg-white shadow-sm rounded p-4">
+                        <div class="d-flex justify-content-between mb-3">
+                            <h5 class="mb-0">Top Results</h5>
+
+                            <!-- Export All Results Button -->
+                            <form method="POST" action="{{ url_for('export_all_results') }}">
+                                <button type="submit" class="btn btn-sm btn-success">Export All Results</button>
+                            </form>
+
+                            <select class="form-select form-select-sm w-auto" onchange="sortResults(this.value)">
+                                <option value="newest" {% if sort_by == 'newest' %}selected{% endif %}>Newest</option>
+                                <option value="oldest" {% if sort_by == 'oldest' %}selected{% endif %}>Oldest</option>
+                                <option value="alphabetical" {% if sort_by == 'alphabetical' %}selected{% endif %}>Alphabetical</option>
+                            </select>
+                        </div>
+
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                <tr class="text-dark">
+                                    <th scope="col"><input class="form-check-input" type="checkbox" id="selectAll" onclick="toggleAllCheckboxes(this)"></th>
+                                    <th scope="col">Document Title</th>
+                                    <th scope="col">Authors</th>
+                                    <th scope="col">Year</th>
+                                    <th scope="col">Publication Name</th>
+                                    <th scope="col">Subtype Description</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                                <tbody>
+                                {% if results %}
+                                  {% for doc in results %}
+                                  <tr class="author-category-{{ doc['authors_category'][0].lower() if doc.get('authors_category') and doc['authors_category'] else 'unknown' }}">
+                                    <td><input class="form-check-input" type="checkbox" value="{{ doc['SCOPUS_ID'] }}" name="selectedDocs"></td>
+                                        <td>{{ doc['Title'] }}</td>
+                                        <td>{{ doc['Authors'] }} ({{ doc['authors_category']|join(', ') }})</td> <!-- Show staff/student category -->
+                                        <td>{{ doc['Cover Date'] }}</td>
+                                        <td>{{ doc['Publication Name'] }}</td>
+                                        <td>{{ doc['Subtype Description'] }}</td>
+                                        <td>
+                                          <a class="btn btn-sm btn-primary" href="{{ url_for('view_detail', doc_id=doc['SCOPUS_ID']) }}">View</a>
+                                        </td>
+                                    </tr>
+                                  {% endfor %}
+                                {% else %}
+                                  <tr><td colspan="7" class="text-center">No results found.</td></tr>
+                                {% endif %}
+                            </tbody>
+                            </table>
+                             <button class="btn btn-sm btn-success" onclick="exportSelectedAsCSV()">Export Selected to CSV</button>
+                        </div>
+
+                    <!-- Pagination -->
+                     <div class="pagination-container">
+                        <div class="pagination-info">
+                        Showing {{ (page - 1) * per_page + 1 }} to {{ (page - 1) * per_page + results|length }} of {{ total_results }} entries
+                        </div>
+                        <div class="pagination-buttons">
+                            <!-- Previous Button -->
+                            {% if page > 1 %}
+                            <a class="btn btn-sm btn-primary" href="{{ url_for('result', page=page-1) }}">Previous</a>
+                            {% endif %}
+
+                            <!-- Page Numbers -->
+                            <div class="page-numbers">
+                        {% for p in pagination_pages %}
+                            {% if p == '...' %}
+                                <span class="page-link disabled">...</span>
+                            {% else %}
+                                <a class="page-link {% if p == page %}active{% endif %}" href="{{ url_for('result', page=p, query=query, sort_by=sort_by) }}">{{ p }}</a>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+
+
+        <!-- Next Button -->
+        {% if page < total_pages %}
+        <a class="btn btn-sm btn-primary" href="{{ url_for('result', page=page+1) }}">Next</a>
+        {% endif %}
+    </div>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Back to Top Button -->
+    <a href="#" class="btn btn-lg btn-primary back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+    <!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='lib/jquery/jquery-3.4.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/chart/chart.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/easing/easing.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/waypoints/waypoints.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/owlcarousel/owl.carousel.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/tempusdominus/js/moment.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/tempusdominus/js/moment-timezone.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+ <script src="{{ url_for('static', filename='js/main2.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='lib/jquery/jquery-3.4.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const yearStart = document.getElementById("yearRangeStart");
+            const yearEnd = document.getElementById("yearRangeEnd");
+            const minYear = document.getElementById("minYear");
+            const maxYear = document.getElementById("maxYear");
+            const docTypeFilter = document.getElementById("docTypeFilter");
+            const authorTypeFilter = document.getElementById("authorTypeFilter");
+            const searchFilter = document.getElementById("searchFilter");
+        
+            // Update visible year labels on input
+            if (yearStart && yearEnd && minYear && maxYear) {
+                yearStart.addEventListener("input", () => {
+                minYear.innerText = yearStart.value;
+                applyFilters();
+            });
+
+            yearEnd.addEventListener("input", () => {
+                maxYear.innerText = yearEnd.value;
+                applyFilters();
+            });
+
+        
+            // Attach change events to filters
+            docTypeFilter.addEventListener("change", applyFilters);
+            authorTypeFilter.addEventListener("change", applyFilters);
+            searchFilter.addEventListener("input", applyFilters);}
+                        
+                        
+function applyFilters() {
+    const fromYear = parseInt(yearStart?.value || 2000);
+    const toYear = parseInt(yearEnd?.value || 2025);
+    const docType = docTypeFilter.value.toLowerCase();
+    const authorType = authorTypeFilter.value.toLowerCase();
+    const searchText = searchFilter.value.trim().toLowerCase();
+
+    const rows = document.querySelectorAll("table tbody tr");
+
+    rows.forEach(row => {
+        const yearText = row.cells[3]?.textContent.trim();
+        const docTypeText = row.cells[5]?.textContent.trim().toLowerCase();
+        const authorText = row.cells[2]?.textContent.trim().toLowerCase();
+        const titleText = row.cells[1]?.textContent.trim().toLowerCase();
+
+        const year = parseInt(yearText?.slice(0, 4)) || 0;
+
+        const matchYear = year >= fromYear && year <= toYear;
+        const matchDocType = docType === "all" || docTypeText.includes(docType);
+        const matchAuthor =
+            authorType === "all" ||
+            (authorType === "staff" && authorText.includes("staff")) ||
+            (authorType === "student" && authorText.includes("student"));
+        const matchSearch =
+            !searchText || titleText.includes(searchText) || authorText.includes(searchText);
+
+        row.style.display = (matchYear && matchDocType && matchAuthor && matchSearch) ? "" : "none";
+    });
+}
+
+            
+            // Sorting function
+            window.sortResults = function (sortBy) {
+                const urlParams = new URLSearchParams(window.location.search);
+                urlParams.set('sort_by', sortBy);
+                urlParams.set('page', 1);
+                const baseUrl = window.location.href.split('?')[0];
+                window.location.href = baseUrl + '?' + urlParams.toString();
+            };
+
+        
+            // Select/Deselect all checkboxes
+            window.toggleAllCheckboxes = function (source) {
+                const checkboxes = document.getElementsByName('selectedDocs');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = source.checked;
+                });
+            };
+        
+            // Export selected documents to CSV
+            window.exportSelectedAsCSV = function () {
+                const selectedDocs = [];
+                const checkboxes = document.getElementsByName('selectedDocs');
+                checkboxes.forEach(checkbox => {
+                    if (checkbox.checked) {
+                        selectedDocs.push(checkbox.value);
+                    }
+                });
+        
+                if (selectedDocs.length === 0) {
+                    alert("Please select at least one document to export.");
+                    return;
+                }
+        
+                const url = '/export_csv';
+                const params = new URLSearchParams();
+                selectedDocs.forEach(docId => params.append('doc_ids', docId));
+        
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = url;
+        
+                for (const [key, value] of params.entries()) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = value;
+                    form.appendChild(input);
+                }
+        
+                document.body.appendChild(form);
+                form.submit();
+            };
+        });
+        </script>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <script type="text/javascript">
+                            // Display the flash message with SweetAlert2
+                            if ("{{ category }}" == "success") {
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: '{{ message }}',
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                }).then(function() {
+                                    // Additional actions if needed after the popup is closed
+                                });
+                            } else if ("{{ category }}" == "warning") {
+                                Swal.fire({
+                                    title: 'Warning!',
+                                    text: '{{ message }}',
+                                    icon: 'warning',
+                                    confirmButtonText: 'OK'
+                                });
+                            }
+                        </script>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        // Check if the message parameter exists in the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const message = urlParams.get('message');
+        
+        if (message === 'export_success') {
+            Swal.fire({
+                title: 'Success!',
+                text: 'Data successfully exported!',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+</script>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <script type="text/javascript">
+                // Display the flash message with SweetAlert2
+                if ("{{ category }}" == "success") {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: '{{ message }}',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                } else if ("{{ category }}" == "warning") {
+                    Swal.fire({
+                        title: 'Warning!',
+                        text: '{{ message }}',
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            </script>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        // Check if the message parameter exists in the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const message = urlParams.get('message');
+        
+        if (message === 'export_success') {
+            Swal.fire({
+                title: 'Success!',
+                text: 'Data successfully exported!',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+</script>
+
+
+
+
+
+</body>
+
+</html>

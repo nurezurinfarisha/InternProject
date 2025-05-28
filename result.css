@@ -1,0 +1,316 @@
+/* General page layout */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7fb; /* Light grey background */
+    margin-top: 80px; /* For space below the fixed header */
+}
+
+.container-fluid {
+    max-width: 1200px; /* Keep the content width under control */
+}
+
+/* Modern Header Style */
+.header-navbar {
+    background-color: #003366; /* Darker Blue for a corporate feel */
+    padding: 15px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for modern look */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.header-navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.home-link {
+    text-decoration: none;
+}
+
+.logo {
+    height: 50px;
+    width: auto;
+}
+
+.title-container {
+    text-align: center;
+    flex-grow: 1; /* Ensure this container expands to center the title */
+}
+
+.title-container h3 {
+    color: white;
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.nav-links ul {
+    display: flex;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.nav-links li {
+    display: inline-block;
+}
+
+.nav-links .nav-link {
+    color: white;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+}
+
+.nav-links .nav-link:hover {
+    color: #66ccff; /* Light Blue Hover effect */
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .header-navbar .container {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+
+    .logo-container {
+        margin-bottom: 10px;
+    }
+
+    .nav-links ul {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .nav-links .nav-link {
+        font-size: 1.2rem;
+    }
+}
+
+
+/* Sidebar Filters */
+.bg-white {
+    background-color: #ffffff;
+}
+
+h5, h6 {
+    color: #0066cc;
+}
+h4{
+    color: #fbfdff;
+}
+
+/* Form Labels */
+.form-label {
+    font-weight: bold;
+    color: #555;
+}
+
+/* Range input styling */
+.form-range {
+    width: 100%;
+    height: 10px;
+    margin-bottom: 20px;
+}
+
+/* Filter Options */
+.form-select {
+    margin-bottom: 20px;
+}
+
+/* Main Content (Results Table) */
+@media (max-width: 768px) {
+  .table-responsive {
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    min-width: 700px; /* ensure table doesn’t shrink too small */
+  }
+}
+
+
+.table th, .table td {
+    padding: 15px;
+    text-align: left;
+    font-size: 14px;
+    word-wrap: break-word;
+}
+
+.table th {
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.table td {
+    background-color: #ffffff;
+    color: #333;
+}
+
+.table-striped tbody tr:nth-child(odd) {
+    background-color: #f1f1f1;
+}
+
+/* Hover Effect for Rows */
+.table tbody tr:hover {
+    background-color: #e9ecef;
+    cursor: pointer;
+}
+
+/* Action Button */
+.btn-primary {
+    background-color: #0066cc;
+    border-color: #0066cc;
+}
+
+.btn-primary:hover {
+    background-color: #005bb5;
+    border-color: #005bb5;
+}
+
+/* Pagination */
+/* Styling for the Pagination Container */
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+/* Displaying the "Showing X to Y of Z entries" text */
+.pagination-info {
+    font-size: 1rem;
+    color: #333;
+}
+
+/* Pagination Buttons */
+.pagination-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Page Number Buttons */
+.page-numbers {
+    display: flex;
+    gap: 5px;
+}
+
+.page-link {
+    padding: 8px 12px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    color: #007bff;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.page-link:hover {
+    background-color: #e6e6e6;
+}
+
+.page-link.active {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+/* Buttons for Previous/Next */
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    padding: 6px 12px;
+    font-size: 1rem;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+
+/* Back to Top Button */
+.back-to-top {
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    background-color: #0066cc;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 20px;
+    padding: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: none;
+}
+
+.back-to-top:hover {
+    background-color: #ffffff;
+}
+
+/* Sidebar filters and content responsiveness */
+@media (max-width: 768px) {
+    /* Stack the columns */
+    .row {
+        flex-direction: column;
+    }
+
+    /* Sidebar styling for smaller screens */
+    .col-md-3 {
+        margin-bottom: 30px;
+    }
+
+    /* Adjust the content for smaller screen sizes */
+    .col-md-9 {
+        margin-top: 20px;
+    }
+
+    .table th, .table td {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .table th {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 576px) {
+    /* Mobile view adjustments */
+    .container-fluid {
+        padding: 15px;
+    }
+
+    .form-select, .form-range {
+        width: 100%;
+    }
+
+    .table {
+        font-size: 12px;
+    }
+
+    .btn-primary {
+        font-size: 12px;
+    }
+}

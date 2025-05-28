@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Lecturer Information</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/result.css') }}" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.15/dist/sweetalert2.all.min.js"></script>
+</head>
+
+<body class="bg-light">
+    <!-- Header Start -->
+    <header class="header-navbar">
+        <div class="container d-flex align-items-center justify-content-between">
+            <img src="{{ url_for('static', filename='img/uumlogo2.png') }}" alt="UUM Logo" class="logo" />
+            <h3 class="mb-0 fw-bold text-white">Scopus Miner</h3>
+
+            <nav class="nav-links d-flex align-items-center">
+                <ul class="nav nav-tabs me-3">
+                    <li class="nav-item">
+                        <a href="{{ url_for('lecturer_info') }}" class="nav-link active">Lecturer</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('documents') }}" class="nav-link">Documents</a>
+                    </li>
+                </ul>
+
+                <a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-sm px-3 py-2 ms-2">
+                    <i class="fa fa-sign-out-alt"></i> Logout
+                </a>
+            </nav>
+        </div>
+    </header>
+    <!-- Header End -->
+
+    <main class="mt-5 pt-5">
+        <div class="container p-5">
+            <div class="row justify-content-center">
+                <!-- Lecturer Management Table -->
+                <div class="col-md-10">
+                    <div class="bg-white shadow-sm rounded p-4">
+<div class="d-flex justify-content-between mb-3">
+    <h5 class="mb-0">Lecturer Information</h5>
+
+    <!-- Search Bar (Improved size and spacing) -->
+    <div class="d-flex align-items-center">
+        <input type="text" id="searchInput" class="form-control me-2" placeholder="Search by name" style="width: 300px; font-size: 1rem;" aria-label="Search">
+    </div>
+    <!-- Add Data Button (Increase size and adjust spacing) -->
+    <button class="btn btn-outline-primary btn-lg" data-bs-toggle="modal" data-bs-target="#addLecturerModal" style="font-size: 1.1rem;">
+        <i class="fa fa-plus"></i> Add Lecturer Details
+    </button>
+    
+</div>
+
+<!-- Table to Display Lecturer Information -->
+<div class="table-responsive">
+    <table class="table table-hover table-bordered" id="lecturerTable">
+        <thead class="table-light">
+            <tr>
+                <th>Staff ID</th>
+                <th>Name</th>
+                <th>School</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Indexed Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for lecturer in lecturers %}
+            <tr>
+                <td>{{ lecturer['No Staf'] }}</td>
+                <td>{{ lecturer['Nama Staf'] }}</td>
+                <td>{{ lecturer['Pusat Pengajian'] }}</td>
+                <td>{{ lecturer['First Name'] }}</td>
+                <td>{{ lecturer['Last Name'] }}</td>
+                <td>{{ lecturer['indexed_name'] }}</td>
+                <td class="d-flex align-items-center">
+    <!-- Edit Button -->
+    <button class="btn btn-outline-warning btn-sm px-3 py-2 me-3" data-bs-toggle="modal" data-bs-target="#editLecturerModal" data-id="{{ lecturer['No Staf'] }}" data-name="{{ lecturer['Nama Staf'] }}" data-department="{{ lecturer['Pusat Pengajian'] }}" data-firstname="{{ lecturer['First Name'] }}" data-lastname="{{ lecturer['Last Name'] }}" data-indexedname="{{ lecturer['indexed_name'] }}">
+        <i class="fa fa-edit"></i> Edit
+    </button>
+    <!-- Delete Button -->
+    <a href="{{ url_for('delete_lecturer', lecturer_id=lecturer['No Staf']) }}" class="btn btn-outline-danger btn-sm" id="deleteLecturer{{ lecturer['No Staf'] }}">
+    <i class="fa fa-trash"></i> Delete
+</a>
+
+</td>
+
+
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="7" class="text-center">No lecturers found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Edit Lecturer Modal -->
+<div class="modal fade" id="editLecturerModal" tabindex="-1" aria-labelledby="editLecturerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editLecturerModalLabel">Edit Lecturer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ url_for('update_lecturer') }}" method="POST">
+                    <input type="hidden" id="edit_staff_id" name="staff_id" required>
+                    <div class="mb-3">
+                        <label for="edit_name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="edit_name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_department" class="form-label">School</label>
+                        <input type="text" class="form-control" id="edit_department" name="department" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_first_name" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="edit_first_name" name="first_name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_last_name" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="edit_last_name" name="last_name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_indexed_name" class="form-label">Indexed Name</label>
+                        <input type="text" class="form-control" id="edit_indexed_name" name="indexed_name" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Lecturer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <!-- Add Lecturer Modal -->
+    <div class="modal fade" id="addLecturerModal" tabindex="-1" aria-labelledby="addLecturerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addLecturerModalLabel">Add New Lecturer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ url_for('add_lecturer') }}" method="POST">
+                        <div class="mb-3">
+                            <label for="staff_id" class="form-label">Staff ID</label>
+                            <input type="text" class="form-control" id="staff_id" name="staff_id" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="department" class="form-label">Department</label>
+                            <input type="text" class="form-control" id="department" name="department" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="first_name" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="last_name" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="indexed_name" class="form-label">Indexed Name</label>
+                            <input type="text" class="form-control" id="indexed_name" name="indexed_name" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Lecturer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <a href="#" class="btn btn-lg btn-primary back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Flash message pop-up using SweetAlert -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <script type="text/javascript">
+                if ("{{ category }}" == "success") {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: '{{ message }}',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                } else if ("{{ category }}" == "error") {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: '{{ message }}',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            </script>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+<script>
+    // Adding event listeners to all delete buttons
+    document.querySelectorAll('a[id^="deleteLecturer"]').forEach(button => {
+        button.addEventListener('click', function (event) {
+            event.preventDefault(); // Prevent the default link behavior
+
+            const deleteUrl = this.href;  // Get the URL to delete the lecturer
+
+            // Show SweetAlert confirmation
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Proceed with the deletion if confirmed
+                    window.location.href = deleteUrl;  // Redirect to delete URL
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "The lecturer has been deleted.",
+                        icon: "success"
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+    <!-- Scroll Top Button Visibility & Action -->
+    <script>
+        const backToTopButton = document.querySelector('.back-to-top');
+
+        window.addEventListener("scroll", function () {
+            if (window.scrollY > 300) {
+                backToTopButton.style.display = "block";
+            } else {
+                backToTopButton.style.display = "none";
+            }
+        });
+
+        backToTopButton.addEventListener("click", function () {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+
+    <script>
+        // Populate the edit modal with existing lecturer data when the "Edit" button is clicked
+        $('#editLecturerModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);  // Button that triggered the modal
+            var staffId = button.data('id');
+            var name = button.data('name');
+            var department = button.data('department');
+            var firstName = button.data('firstname');
+            var lastName = button.data('lastname');
+            var indexedName = button.data('indexedname');
+
+            var modal = $(this);
+            modal.find('#edit_staff_id').val(staffId);
+            modal.find('#edit_name').val(name);
+            modal.find('#edit_department').val(department);
+            modal.find('#edit_first_name').val(firstName);
+            modal.find('#edit_last_name').val(lastName);
+            modal.find('#edit_indexed_name').val(indexedName);
+        });
+    </script>
+    <script>
+    // Get the search input and the table
+    const searchInput = document.getElementById('searchInput'); // The ID of the search input
+    const table = document.getElementById('lecturerTable'); // The ID of the table containing lecturer data
+
+    // Add event listener to filter table rows as user types in the search box
+    searchInput.addEventListener('keyup', function() {
+        const filter = searchInput.value.toLowerCase();  // Convert search input to lowercase
+        const rows = table.getElementsByTagName('tr');  // Get all rows in the table
+
+        // Loop through all table rows and hide those that don't match the search query
+        for (let i = 1; i < rows.length; i++) {  // Start from 1 to skip the header row
+            const row = rows[i];
+            const cells = row.getElementsByTagName('td');  // Get all cells in the row
+            let matchFound = false;
+
+            // Loop through each cell in the row and check if it matches the search term
+            for (let j = 0; j < cells.length; j++) {
+                const cell = cells[j];
+                if (cell.textContent.toLowerCase().includes(filter)) {
+                    matchFound = true;
+                    break; // If a match is found, no need to check other cells in this row
+                }
+            }
+
+            // Show or hide the row based on whether it matches the search term
+            if (matchFound) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    });
+</script>
+
+<script>
+    // Adding event listeners to all delete buttons
+    document.querySelectorAll('a[id^="deleteLecturer"]').forEach(button => {
+        button.addEventListener('click', function (event) {
+            event.preventDefault(); // Prevent the default link behavior
+
+            const deleteUrl = this.href;  // Get the URL to delete the lecturer
+
+            // Show SweetAlert confirmation
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Proceed with the deletion if confirmed
+                    window.location.href = deleteUrl;  // Redirect to delete URL
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "The lecturer has been deleted.",
+                        icon: "success"
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+
+
+
+</body>
+
+</html>

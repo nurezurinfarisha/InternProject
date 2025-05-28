@@ -1,0 +1,289 @@
+/* result.css */
+
+/* Global Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f9;
+    color: #333;
+}
+
+/* Header */
+
+/* Modern Header Style */
+.header-navbar {
+    background-color: #003366; /* Darker Blue for a corporate feel */
+    padding: 15px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for modern look */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.header-navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.home-link {
+    text-decoration: none;
+}
+
+.logo {
+    height: 50px;
+    width: auto;
+}
+
+.title-container {
+    text-align: center;
+    flex-grow: 1; /* Ensure this container expands to center the title */
+}
+
+.title-container h3 {
+    color: white;
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.nav-links ul {
+    display: flex;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.nav-links li {
+    display: inline-block;
+}
+
+.nav-links .nav-link {
+    color: white;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+}
+
+.nav-links .nav-link:hover {
+    color: #66ccff; /* Light Blue Hover effect */
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .header-navbar .container {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+
+    .logo-container {
+        margin-bottom: 10px;
+    }
+
+    .nav-links ul {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .nav-links .nav-link {
+        font-size: 1.2rem;
+    }
+}
+
+
+/* Main Section */
+main {
+    padding-top: 60px;
+    padding-bottom: 50px;
+}
+
+/* Search Bar */
+#searchInput {
+    max-width: 350px;
+    padding: 10px 15px;
+    border-radius: 25px;
+    border: 1px solid #ced4da;
+}
+
+#yearFilter, .btn-outline-info {
+    padding: 8px 20px;
+    border-radius: 25px;
+}
+
+/* Table Styling */
+.table-responsive {
+    margin-top: 30px;
+}
+
+.table-hover {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.table-hover th, .table-hover td {
+    padding: 12px;
+    text-align: left;
+}
+
+.table-light {
+    background-color: #f9f9f9;
+}
+
+.table-hover tr:hover {
+    background-color: #f1f1f1;
+}
+
+.table-hover th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    border-top: 1px solid #ddd;
+}
+
+/* Modals */
+.modal-header {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.modal-body input {
+    border-radius: 10px;
+    border: 1px solid #ced4da;
+    padding: 10px 15px;
+    width: 100%;
+}
+
+.modal-footer button {
+    padding: 10px 15px;
+}
+
+/* Back to Top Button */
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: none;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 15px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.back-to-top:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header-navbar h3 {
+        font-size: 20px;
+    }
+
+    .header-navbar .logo {
+        width: 80px;
+    }
+
+    .nav-links .nav-tabs {
+        font-size: 14px;
+    }
+
+    .table-hover th, .table-hover td {
+        font-size: 14px;
+    }
+}
+/* Buttons Styling for Actions */
+.btn-action {
+    padding: 6px 14px;
+    font-weight: 600;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 0.1);
+    transition: all 0.3s ease;
+}
+
+/* Edit - Yellow */
+.btn-edit {
+    color: #856404;
+    background-color: #fff3cd;
+    border: 1.5px solid #ffeeba;
+}
+
+.btn-edit:hover {
+    background-color: #ffe8a1;
+    color: #664d03;
+    box-shadow: 0 4px 8px rgb(255 235 59 / 0.4);
+}
+
+/* Delete - Red */
+.btn-delete {
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1.5px solid #f5c6cb;
+}
+
+.btn-delete:hover {
+    background-color: #f5a5aa;
+    color: #491217;
+    box-shadow: 0 4px 8px rgb(220 53 69 / 0.5);
+}
+
+/* View - Blue */
+.btn-view {
+    color: #004085;
+    background-color: #cce5ff;
+    border: 1.5px solid #b8daff;
+}
+
+.btn-view:hover {
+    background-color: #99ccff;
+    color: #002752;
+    box-shadow: 0 4px 8px rgb(0 123 255 / 0.5);
+}
+
+/* Add consistent margin between buttons */
+.btn-action + .btn-action {
+    margin-left: 8px;
+}
+/* Fixed width with wrapped text */
+#documentsTable th:first-child,
+#documentsTable td:first-child {
+    max-width: 400px;   /* or width: 300px; */
+    white-space: normal; /* allow wrapping */
+    word-wrap: break-word; /* break long words */
+    overflow-wrap: break-word; /* modern alternative */
+}
+
+#documentsTable th:nth-child(2),
+#documentsTable td:nth-child(2) {
+    max-width: 200px;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+#documentsTable th:nth-child(4),
+#documentsTable td:nth-child(4) {
+    max-width: 180px;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+

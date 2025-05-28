@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Author Search Results</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/result.css') }}" rel="stylesheet">
+     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.15/dist/sweetalert2.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.15/dist/sweetalert2.all.min.js"></script>
+
+</head>
+
+<body class="bg-light">
+
+    <!-- Header Start -->
+    <header class="header-navbar">
+        <div class="container">
+            <img src="{{ url_for('static', filename='img/uumlogo2.png') }}" alt="UUM Logo" class="logo">
+            <div class="title-container">
+                <h3 class="mb-0 fw-bold text-white">Scopus Miner</h3>
+            </div>
+            <nav class="nav-links">
+                <ul>
+                    <div class="logo-container">
+                        <a href="{{ url_for('index') }}" class="home-link">
+                            <i class="fas fa-home text-white" style="font-size: 1.8rem;"></i>
+                        </a>
+                    </div>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <!-- Header End -->
+
+    <main class="mt-5 pt-5">
+        <div class="container p-5">
+            <div class="row justify-content-center">
+                <!-- Main Results Table -->
+                <div class="col-md-10">
+                    <div class="bg-white shadow-sm rounded p-4">
+                        <div class="d-flex justify-content-between mb-3">
+                            <h5 class="mb-0">Authors Results: </h5>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Author</th>
+                                        <th>Total Documents</th>
+                                        <th>Affiliation</th>
+                                        <th>Subject Areas</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for author in authors %}
+                                    <tr>
+                                        <td class="text-wrap">{{ author.name }}</td>
+                                        <td>{{ author.document_count }}</td>
+                                        <td>{{ author.affiliation }}</td>
+                                        <td>{{ author.subject_areas }}</td>
+                                        <td>
+                                            <a href="{{ url_for('author_detail', author_id=author.author_id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                                        </td>
+                                    </tr>
+                                    {% else %}
+                                    <tr><td colspan="5" class="text-center">No authors found.</td></tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Back to Top Button -->
+    <a href="#" class="btn btn-lg btn-primary back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Back to Top Button Visibility & Action
+        const backToTopButton = document.querySelector('.back-to-top');
+
+        window.addEventListener("scroll", function () {
+            if (window.scrollY > 300) {
+                backToTopButton.style.display = "block";
+            } else {
+                backToTopButton.style.display = "none";
+            }
+        });
+
+        backToTopButton.addEventListener("click", function () {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+            </script>
+{% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <script type="text/javascript">
+                    // Display the flash message with SweetAlert2
+                    if ("{{ category }}" == "success") {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: '{{ message }}',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then(function() {
+                            // You can do additional actions here if needed
+                        });
+                    } else if ("{{ category }}" == "error") {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: '{{ message }}',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        }).then(function() {
+                            // You can do additional actions here if needed
+                        });
+                    }
+                </script>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+<script type="text/javascript">
+    document.querySelector('form').addEventListener('submit', function () {
+        // Show loading indicator when the user submits the search
+        Swal.fire({
+            title: '🔄 Data is in process. Fetching from Scopus…',
+            text: 'Please wait while we fetch the data.',
+            icon: 'info',
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+    });
+</script>
+</body>
+
+</html>

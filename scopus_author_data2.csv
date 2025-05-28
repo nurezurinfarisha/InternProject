@@ -1,0 +1,18 @@
+Author Name,N/A
+Author ID,56938734000
+Affiliation,Universiti Utara Malaysia
+h-index,1
+Total Documents,9
+Total Citations,4
+Subject Areas,"Computer Networks and Communications, Information Systems, Control and Systems Engineering, Engineering (miscellaneous), Communication, Computer Science (all), Computer Science Applications, Signal Processing, Electrical and Electronic Engineering, Management, Monitoring, Policy and Law, Artificial Intelligence, Management of Technology and Innovation, Hardware and Architecture, Computer Vision and Pattern Recognition, Software, Mathematics (all), Decision Sciences (all), Agronomy and Crop Science, Energy (miscellaneous), Information Systems and Management, Human-Computer Interaction"
+
+SCOPUS_ID,Title,Publication,Date,DOI,Cited By,URL
+SCOPUS_ID:85210017274,Swin-YOLOX for autonomous and accurate drone visual landing,IET Image Processing,2024-12-11,10.1049/ipr2.13282,0,https://api.elsevier.com/content/abstract/scopus_id/85210017274
+SCOPUS_ID:85185720396,University Student Dashboard: Enhancing Student Trend Analysis and Decision-Making Processes,Communications in Computer and Information Science,2024-01-01,10.1007/978-981-99-9592-9_11,0,https://api.elsevier.com/content/abstract/scopus_id/85185720396
+SCOPUS_ID:85185713601,Estate Planning Model for Sustaining Economic Values of Digital Assets,Communications in Computer and Information Science,2024-01-01,10.1007/978-981-99-9592-9_26,0,https://api.elsevier.com/content/abstract/scopus_id/85185713601
+SCOPUS_ID:85179996604,Model for Dynamic Business Process Integration and Visualization Using Business Intelligence and SOA,Journal of System and Management Sciences,2024-01-01,10.33168/JSMS.2024.0113,1,https://api.elsevier.com/content/abstract/scopus_id/85179996604
+SCOPUS_ID:85163796267,An observational mechanism for detection of distributed denialof-service attacks,International Journal of Advances in Applied Sciences,2023-06-01,10.11591/ijaas.v12.i2.pp121-132,0,https://api.elsevier.com/content/abstract/scopus_id/85163796267
+SCOPUS_ID:85182273290,Analyzing the Influence of Social Media on the Personality Traits of IT Students,"International Conference on Engineering Technologies and Applied Sciences: Shaping the Future of Technology through Smart Computing and Engineering, ICETAS 2023",2023-01-01,10.1109/ICETAS59148.2023.10346387,1,https://api.elsevier.com/content/abstract/scopus_id/85182273290
+SCOPUS_ID:85063004798,Early abnormal heartbeat multistage classification by using decision tree and K-nearest neighbor,ACM International Conference Proceeding Series,2018-12-21,10.1145/3299819.3299848,2,https://api.elsevier.com/content/abstract/scopus_id/85063004798
+SCOPUS_ID:85047981547,Hybrid mechanism to detect paroxysmal stage of atrial fibrillation using adaptive threshold-based algorithm with artificial neural network,IEICE Transactions on Information and Systems,2018-06-01,10.1587/transinf.2017EDP7235,0,https://api.elsevier.com/content/abstract/scopus_id/85047981547
+SCOPUS_ID:84945938420,Diagnosis of ECG data for detecting cardiac disorder using DP-matching and artificial neural network,"Smart Innovation, Systems and Technologies",2016-01-01,10.1007/978-3-319-23024-5_15,0,https://api.elsevier.com/content/abstract/scopus_id/84945938420

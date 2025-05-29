@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>API Key Management | Scopus Miner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <link href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" />
+  <link href="{{ url_for('static', filename='css/result.css') }}" rel="stylesheet" />
+  
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<header class="header-navbar">
+  <div class="container">
+    <img src="{{ url_for('static', filename='img/uumlogo2.png') }}" alt="UUM Logo" class="logo" />
+    <div class="title-container">
+      <h3 class="mb-0 fw-bold text-white">Scopus Miner</h3>
+    </div>
+    <nav class="nav-links">
+      <ul>
+        <div class="logo-container">
+          <a href="{{ url_for('index') }}" class="home-link">
+            <i class="fas fa-home text-white" style="font-size: 1.8rem;"></i>
+          </a>
+        </div>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<body class="bg-light">
+  <div class="container mt-5 mb-5">
+    <div class="card shadow-lg">
+      <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">API Key Management</h4>
+        <a href="{{ url_for('lecturer_info') }}" class="btn btn-light btn-sm">
+          <i class="bi bi-arrow-left"></i> Back 
+        </a>
+      </div>
+      <div class="card-body">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>API Key</th>
+              <th>Last Used</th>
+              <th>Created At</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for key in api_keys %}
+            <tr>
+              <td>{{ key.api_key }}</td>
+              <td>{{ key.last_used or 'Never' }}</td>
+              <td>{{ key.created_at }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="3" class="text-center">No API keys found.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <button id="updateKeyBtn" class="btn btn-primary mt-3">Update API Key</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('updateKeyBtn').addEventListener('click', () => {
+      Swal.fire({
+        title: 'Enter new API Key',
+        input: 'text',
+        inputLabel: 'Create Scopus Account to generate API Key ',
+        inputPlaceholder: 'Enter the new Scopus API key',
+        showCancelButton: true,
+        confirmButtonText: 'Update',
+        preConfirm: (newKey) => {
+          if (!newKey) {
+            Swal.showValidationMessage('API key cannot be empty');
+          }
+          return newKey;
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const form = document.createElement('form');
+          form.method = 'POST';
+          form.action = "{{ url_for('admin_api_key_update') }}";
+
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = 'new_api_key';
+          input.value = result.value;
+          form.appendChild(input);
+
+          document.body.appendChild(form);
+          form.submit();
+        }
+      });
+    });
+  </script>
+
+  <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
